@@ -41,9 +41,9 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.get('/users', (req, res) => {
-    res.send(users);
-});
+// app.get('/users', (req, res) => {
+//     res.send(users);
+// });
 
 app.get('/users/:id', (req, res) => {
     const id = req.params['id'];
@@ -71,6 +71,20 @@ app.delete('/users/:id', (req, res) => {
        let ind = users['users_list'].indexOf(result);
        result = {users_list : users['users_list'].splice(ind, 1)};
        res.send(result);
+       res.status(200).end();
+    }
+});
+
+app.get('/users', (req, res) => {
+    const name = req.query.name;
+    const id = req.query.id;
+    if(name !== undefined && id !== undefined) {
+        let result = findUserByNameAndId(name, id);
+        result = {users_list : result};
+        res.send(result);
+        res.status(200).end();  
+    } else {
+        res.send(users);
     }
 });
 
@@ -80,6 +94,10 @@ function addUser(user){
 
 function findUserById(id) {
     return users['users_list'].find( (user) => user['id'] === id);
+}
+
+function findUserByNameAndId(name, id) {
+    return users['users_list'].find((user) => user['id'] === id && user['name'] == name);
 }
 
 app.listen(port, () => {
