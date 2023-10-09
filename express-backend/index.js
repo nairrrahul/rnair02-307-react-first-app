@@ -93,7 +93,11 @@ app.get('/users', (req, res) => {
 });
 
 function addUser(user){
-    user.id = genRandomId();
+    user = {
+        id: genRandomId(),
+        name: user.name,
+        job:user.job
+    };
     users['users_list'].push(user);
 }
 
@@ -126,6 +130,7 @@ function genRandomId() {
             }
             id = id_fin;
         }
+        i++;
     }
     return id;
 }

@@ -14,7 +14,6 @@ function MyApp() {
       if(result && result.status == 200){
         setCharacters(result.data.users_list);
       }
-      console.log(characters);
     });
   }
 
@@ -46,6 +45,7 @@ function MyApp() {
 
   async function makePostCall(person){
     try {
+      //console.log(person);
        const response = await axios.post('http://localhost:8000/users', person);
        return response;
     }
@@ -57,8 +57,9 @@ function MyApp() {
 
   function updateList(person) { 
     makePostCall(person).then( result => {
-    if (result && result.status === 201)
-       setCharacters([...characters, person] );
+    //not sure why 200 - 201 in the backend
+    if (result && result.status === 200)
+       setCharacters(result.data.users_list);
     });
   }
 
