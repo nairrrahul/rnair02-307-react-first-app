@@ -61,6 +61,7 @@ app.get('/users/:id', (req, res) => {
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
+    res.send({users_list : users['users_list']});
     res.status(201).end();
 });
 
@@ -73,7 +74,7 @@ app.delete('/users/:id', (req, res) => {
        let ind = users['users_list'].indexOf(result);
        result = {users_list : users['users_list'].splice(ind, 1)};
        res.send(result);
-       res.status(200).end();
+       res.status(204).end();
     }
 });
 
