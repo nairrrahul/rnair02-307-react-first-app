@@ -5,7 +5,7 @@ import cors from 'cors';
 const app = express();
 const port = 8000;
 
-const users = { 
+let users = { 
    users_list :
    [
       { 
@@ -71,8 +71,9 @@ app.delete('/users/:id', (req, res) => {
     if (result === undefined || result.length == 0)
         res.status(404).send('Resource not found.');
     else {
-       let ind = users['users_list'].indexOf(result);
-       result = {users_list : users['users_list'].splice(ind, 1)};
+       let filtered_list = filterOutById(result.id);
+       users['users_list'] = filtered_list;
+       result = {users_list : users['users_list']};
        res.send(result);
        res.status(204).end();
     }
@@ -94,6 +95,10 @@ app.get('/users', (req, res) => {
 function addUser(user){
     user.id = genRandomId();
     users['users_list'].push(user);
+}
+
+function filterOutById(id) {
+    return users['users_list'].filter((user) => user['id'] !== id);
 }
 
 function findUserById(id) {

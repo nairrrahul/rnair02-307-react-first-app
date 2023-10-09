@@ -10,8 +10,11 @@ function MyApp() {
   function removeOneCharacter (index) {
     let id = characters[index]['id'];
     deleteByIdx(id).then(result => {
-      if(result && result.status == 204)
-        setCharacters(characters);
+      // not sure why 200 - 204 in backend
+      if(result && result.status == 200){
+        setCharacters(result.data.users_list);
+      }
+      console.log(characters);
     });
   }
 
