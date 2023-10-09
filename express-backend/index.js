@@ -61,7 +61,7 @@ app.get('/users/:id', (req, res) => {
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
-    res.status(200).end();
+    res.status(201).end();
 });
 
 app.delete('/users/:id', (req, res) => {
@@ -91,6 +91,7 @@ app.get('/users', (req, res) => {
 });
 
 function addUser(user){
+    user.id = genRandomId();
     users['users_list'].push(user);
 }
 
@@ -100,6 +101,27 @@ function findUserById(id) {
 
 function findUserByNameAndId(name, id) {
     return users['users_list'].find((user) => user['id'] === id && user['name'] == name);
+}
+
+function genRandomId() {
+    let ids_list = users['users_list'].map((user) => user.id);
+    let i = 0;
+    let id = "";
+    while(i < 4){
+        if(i < 3){
+            let idx = Math.floor(Math.random() * 26);
+            id += String.fromCharCode(idx + 65);
+        } else {
+            let rng_num = Math.floor(Math.random() * 999);
+            let id_fin = id + rng_num.toString().padStart(3, '0');
+            while (ids_list.indexOf(id_fin) != -1) {
+                rng_num = (rng_num+1) % 1000;
+                id_fin = id + rng_num.toString().padStart(3, '0');
+            }
+            id = id_fin;
+        }
+    }
+    return id;
 }
 
 app.listen(port, () => {
